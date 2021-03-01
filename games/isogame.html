@@ -1,11 +1,18 @@
 <html>
     <head>
+        <meta charset="UTF-8">
         <script src="isogame.js"></script>
         <link rel="stylesheet" href="isogame.css">
     </head>
     <body>
         <canvas id="canvas_area" width=665 height=380 style='width:665px;height:380px' onload="setupCanvas()"></canvas>
         <div id="pieces">
+            <div class="piece" id="p0" onclick="selectThis(this,0)">
+                <img src="cube/blank.png" width="82" height="82">
+                <br>
+                <p id=pc0>0</p>
+                <p id=sc0>Use to undo.</p>
+            </div>
             <div class="piece" id="p1" onclick="selectThis(this,1)">
                 <img src="cube/forest.png" width="82" height="82">
                 <br>
@@ -16,12 +23,13 @@
                 <img src="cube/farm.png" width="82" height="82">
                 <br>
                 <p id=pc2>0</p>
-                <p id=sc2>+2 by towns</p>
+                <p id=sc2>+3 by towns</p>
             </div>
             <div class="piece" id="p3" onclick="selectThis(this,3)">
                 <img src="cube/town.png" width="82" height="82">
                 <br>
                 <p id=pc3>0</p>
+                <p id=sc3>+2 by mountains</p>
             </div>
             <div class="piece" id="p4" onclick="selectThis(this,4)">
                 <img src="cube/lake.png" width="82" height="82">
@@ -33,10 +41,12 @@
                 <img src="cube/mountain.png" width="82" height="82">
                 <br>
                 <p id=pc5>0</p>
-                <p id=sc5>-1 by mountains<br>-1 by farms</p>
+                <p id=sc5>-1 by mountains<br>-2 by farms</p>
             </div>
         </div>
         <button class="start_game" id="rand_game" onclick="startGame(0)">Random game</button>
+        <button class="start_game" id="load_game" onclick="startGame(1)">Load game:</button>
+        <input type="number" id="seed" value="0" min="0" max="99999">
         <button class="score_game" onclick="scoreGame(0)">Score Game</button>
         <div id="score_value">0 points</div>
     </body>

@@ -44,6 +44,8 @@ var tiles_next_to=[
 ];
 
 //Images
+var blankImg=new Image();
+blankImg.src='cube/blank.png';
 var forestImg=new Image();
 forestImg.src='cube/forest.png';
 var farmImg=new Image();
@@ -56,7 +58,7 @@ var mountainImg=new Image();
 mountainImg.src='cube/mountain.png';
 
 var sprite=[
-    new Image(),
+    blankImg,
     forestImg,
     farmImg,
     townImg,
@@ -91,9 +93,9 @@ function placeCubeOnThis(event) {
     // document.getElementById('debug').innerText='clicked: ' +x+', '+y;
     nearest = nearestSpot(pts);
     //check if you have any of this piece left
-    if(parseInt(document.getElementById('pc'+selectedCubeType).innerText)>0){
+    if(parseInt(document.getElementById('pc'+selectedCubeType).innerText)>0 || selectedCubeType==0){
 
-        if (setBoardAt(nearest,selectedCubeType)==true){
+        if (setBoardAt(nearest,selectedCubeType)==true && selectedCubeType>0){
             document.getElementById('pc'+selectedCubeType).innerText = parseInt(document.getElementById('pc'+selectedCubeType).innerText) -1;
         }
     }
@@ -106,8 +108,8 @@ function drawBoard(){
     
     //draw each tile
     board.forEach(element => {
-        if(element[1]>0){
-            console.log('drawing tile');
+        if(element[1]>=0){
+            // console.log('drawing tile');
             drawCube(element[0],sprite[element[1]]);
         }
     });
@@ -191,7 +193,9 @@ function dist(pts1, pts2){
 function startGame(gametype){
     clearCanvas();
     resetBoardVals();
-    
+    drawBoard();
+    document.getElementById('score_value').innerText = "0 points";
+
     //reset counts
     for(var i = 1;i<sprite.length;i++){
         setAmountOfTile(i,0);
@@ -202,6 +206,29 @@ function startGame(gametype){
         for(var i=0;i<18;i++){
             var j = Math.floor(Math.random() * NUM_TILE_TYPES) + 1;
             document.getElementById('pc'+j).innerText = parseInt(document.getElementById('pc'+j).innerText) + 1;
+        }
+        //write the seed value to the seed input
+        var new_seed = "";
+        for(var i=1;i<=NUM_TILE_TYPES;i++){
+            new_seed += document.getElementById('pc'+i).innerText;
+        }
+        document.getElementById('seed').value = new_seed;
+    } else if (gametype == 1){
+        //set up game from the seed
+        var seed_val = document.getElementById('seed').value;
+        if (parseInt(seed_val) >= Math.pow(10,NUM_TILE_TYPES) || parseInt(seed_val) < 0){
+            //out of bounds, set it to 0
+            seed_val = "00000";
+        }
+        var seed_array = Array.from(seed_val).map(Number);
+        // console.log(seed_array);
+        for(var i=1;i<=NUM_TILE_TYPES;i++){
+            if(seed_array.length<i) {
+                document.getElementById('pc'+i).innerText = 0;
+            }
+            else {
+                document.getElementById('pc'+i).innerText = seed_array[i-1];
+            }
         }
     }
 }
@@ -224,7 +251,7 @@ function scoreTile(tileId){
     score = 0;
     //get tile type
     tile_type = board[tileId][1];
-    console.log(tile_type);
+    // console.log(tile_type);
 
     //get surrounding tiles 
     //and go thru each to score
@@ -238,13 +265,15 @@ function scoreTile(tileId){
             //farms need forests
             if(neighbour == FOREST) score += 1;
             //farms should not be by mountain (rocky dirt)
-            if(neighbour == MOUNTAIN) score -= 1;
+            if(neighbour == MOUNTAIN) score -= 2;
         }
         if (tile_type == TOWN){
             //towns like a farm nearby
-            if(neighbour == FARM) score += 2;
+            if(neighbour == FARM) score += 3;
             //waterfront property is good
             if(neighbour == LAKE) score += 1;
+            //towns by moutains are good for climate
+            if(neighbour == MOUNTAIN) score += 2;
         }
         if (tile_type == LAKE){
             //Bigger areas for fish are good
