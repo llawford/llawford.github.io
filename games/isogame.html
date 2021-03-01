@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <script src="isogame.js"></script>
+        <link rel="stylesheet" href="isogame.css">
+    </head>
+    <body>
+        <canvas id="canvas_area" width=665 height=380 style='width:665px;height:380px' onload="setupCanvas()"></canvas>
+        <div id="pieces">
+            <div class="piece" id="p1" onclick="selectThis(this,1)">
+                <img src="cube/forest.png" width="82" height="82">
+                <br>
+                <p id=pc1>0</p>
+                <p id=sc1>+1 by forests<br>+1 by farms</p>
+            </div>
+            <div class="piece" id="p2" onclick="selectThis(this,2)">
+                <img src="cube/farm.png" width="82" height="82">
+                <br>
+                <p id=pc2>0</p>
+                <p id=sc2>+2 by towns</p>
+            </div>
+            <div class="piece" id="p3" onclick="selectThis(this,3)">
+                <img src="cube/town.png" width="82" height="82">
+                <br>
+                <p id=pc3>0</p>
+            </div>
+            <div class="piece" id="p4" onclick="selectThis(this,4)">
+                <img src="cube/lake.png" width="82" height="82">
+                <br>
+                <p id=pc4>0</p>
+                <p id=sc4>+2 by lakes<br>+1 by towns</p>
+            </div>
+            <div class="piece" id="p5" onclick="selectThis(this,5)">
+                <img src="cube/mountain.png" width="82" height="82">
+                <br>
+                <p id=pc5>0</p>
+                <p id=sc5>-1 by mountains<br>-1 by farms</p>
+            </div>
+        </div>
+        <button class="start_game" id="rand_game" onclick="startGame(0)">Random game</button>
+        <button class="score_game" onclick="scoreGame(0)">Score Game</button>
+        <div id="score_value">0 points</div>
+    </body>
+</html>
